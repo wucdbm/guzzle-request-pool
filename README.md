@@ -10,6 +10,8 @@ You've come to the right place!
 
 Just use `Wucdbm\GuzzleHttp\Pool` like you would `GuzzleHttp\Pool` and enjoy cold beer ;)
 
+`composer require wucdbm/guzzle-request-pool`
+
 In fact, Guzzle's Pool was working fine for the most part, except several lines of code where the design was plain wrong.
 The problem manifests itself when you send an arbitrary number of additional requests from your fulfilled handlers.
 This library solves that problem.
