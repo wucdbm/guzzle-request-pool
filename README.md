@@ -1,7 +1,9 @@
 # Async GuzzleHttp Request Pool
 
 Tired of your GuzzleHttp request pool randomly not working?
+
 Tired of trying to get concurrency just right so Guzzle will actually execute *ALL* of your requests?
+
 Tired of pulling your hair because your last async request is not executing and you don't know why?
 
 You've come to the right place!
