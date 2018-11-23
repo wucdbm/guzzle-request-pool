@@ -21,3 +21,7 @@ As my changes swayed away from just one or two lines of code during development,
 It should be fully compatible with Guzzle `"guzzlehttp/guzzle": "~6.0"`. If you encounter any issues, please let me know.
 
 Original comments from Guzzle's code I used as a base are (mostly) preserved.
+
+# TODO 
+
+- IteratorWrapper should check if `$requests instanceof static`, and then do `$this->iterator = $requests->iterator;` because else we'd be calling the `current()` method twice, thus trying to send async a promise, or execute it as a function
