@@ -11,10 +11,10 @@
 
 namespace Wucdbm\GuzzleHttp;
 
+use GuzzleHttp\Promise\Create;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\PromisorInterface;
-use function GuzzleHttp\Promise\promise_for;
 
 /**
  * Represents a promise that iterates over many promises and invokes
@@ -76,7 +76,7 @@ class EachPromise implements PromisorInterface {
         }
     }
 
-    public function promise() {
+    public function promise(): PromiseInterface {
         if ($this->aggregate) {
             return $this->aggregate;
         }
@@ -92,7 +92,8 @@ class EachPromise implements PromisorInterface {
         return $this->aggregate;
     }
 
-    private function createPromise() {
+    private function createPromise(): void
+    {
         $this->aggregate = new Promise(function () {
             reset($this->pending);
             if (empty($this->pending) && !$this->iterable->valid()) {
@@ -121,7 +122,8 @@ class EachPromise implements PromisorInterface {
         $this->aggregate->then($clearFn, $clearFn);
     }
 
-    private function refillPending() {
+    private function refillPending(): void
+    {
         if (!$this->concurrency) {
             // Add all pending promises.
             while ($this->iterable->valid()) {
@@ -151,8 +153,9 @@ class EachPromise implements PromisorInterface {
         }
     }
 
-    private function addPending() {
-        $promise = promise_for($this->iterable->current());
+    private function addPending(): true
+    {
+        $promise = Create::promiseFor($this->iterable->current());
         $idx = $this->iterable->key();
 
         $this->pending[$idx] = $promise->then(
@@ -177,7 +180,8 @@ class EachPromise implements PromisorInterface {
         return true;
     }
 
-    private function advanceIterator() {
+    private function advanceIterator(): bool
+    {
         try {
             $this->iterable->next();
 
@@ -189,7 +193,8 @@ class EachPromise implements PromisorInterface {
         }
     }
 
-    private function step($idx) {
+    private function step($idx): void
+    {
         // If the promise was already resolved, then ignore this step.
         if (PromiseInterface::PENDING !== $this->aggregate->getState()) {
             return;
@@ -202,7 +207,8 @@ class EachPromise implements PromisorInterface {
         }
     }
 
-    private function checkIfFinished() {
+    private function checkIfFinished(): bool
+    {
         if (!$this->pending && !$this->iterable->valid()) {
             // Resolve the promise if there's nothing left to do.
             $this->aggregate->resolve(null);

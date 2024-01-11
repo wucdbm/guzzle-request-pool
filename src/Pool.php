@@ -12,6 +12,7 @@
 namespace Wucdbm\GuzzleHttp;
 
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\PromisorInterface;
 
 /**
@@ -64,7 +65,7 @@ class Pool implements PromisorInterface {
         $this->each = new EachPromise($requests, $config);
     }
 
-    public function promise() {
+    public function promise(): PromiseInterface {
         return $this->each->promise();
     }
 
@@ -90,7 +91,8 @@ class Pool implements PromisorInterface {
         ClientInterface $client,
         $requests,
         array $options = []
-    ) {
+    ): array
+    {
         $res = [];
         self::cmpCallback($options, 'fulfilled', $res);
         self::cmpCallback($options, 'rejected', $res);
@@ -101,7 +103,8 @@ class Pool implements PromisorInterface {
         return $res;
     }
 
-    private static function cmpCallback(array &$options, $name, array &$results) {
+    private static function cmpCallback(array &$options, $name, array &$results): void
+    {
         if (!isset($options[$name])) {
             $options[$name] = function ($v, $k) use (&$results) {
                 $results[$k] = $v;
