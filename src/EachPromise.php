@@ -153,7 +153,7 @@ class EachPromise implements PromisorInterface {
         }
     }
 
-    private function addPending(): true
+    private function addPending(): void
     {
         $promise = Create::promiseFor($this->iterable->current());
         $idx = $this->iterable->key();
@@ -176,8 +176,6 @@ class EachPromise implements PromisorInterface {
                 $this->step($idx);
             }
         );
-
-        return true;
     }
 
     private function advanceIterator(): bool
